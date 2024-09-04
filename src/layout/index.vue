@@ -1,26 +1,32 @@
 <template>
   <div :class="classObj" class="app-wrapper">
-    <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
-    <sidebar class="sidebar-container" />
-    <div class="main-container">
-      <div :class="{'fixed-header':fixedHeader}">
-        <navbar />
+    <div class="header">
+      <div class="left-content">
+        <img
+          style="height: 25px; float: left"
+          src="@/assets/newLogo.png"
+          alt=""
+        >
+        <div class="title">河钢统一认证系统</div>
       </div>
-      <app-main />
+      <div class="right-content">
+        <LoginOut />
+      </div>
     </div>
+    <app-main />
   </div>
 </template>
 
 <script>
-import { Navbar, Sidebar, AppMain } from './components'
+import { AppMain } from './components'
+import LoginOut from './components/LoginOut'
 import ResizeMixin from './mixin/ResizeHandler'
 
 export default {
   name: 'Layout',
   components: {
-    Navbar,
-    Sidebar,
-    AppMain
+    AppMain,
+    LoginOut
   },
   mixins: [ResizeMixin],
   computed: {
@@ -51,43 +57,69 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/styles/mixin.scss";
-  @import "~@/styles/variables.scss";
-
-  .app-wrapper {
-    @include clearfix;
-    position: relative;
-    height: 100%;
-    width: 100%;
-    &.mobile.openSidebar{
-      position: fixed;
-      top: 0;
-    }
+@import "~@/styles/mixin.scss";
+@import "~@/styles/variables.scss";
+.header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 60px;
+  position: fixed;
+  z-index: 999;
+  padding: 0 16px;
+  background-color: #fff;
+  box-shadow: 0 1px 10px #0003;
+  top: 0;
+  left: 0;
+  .left-content {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
   }
-  .drawer-bg {
-    background: #000;
-    opacity: 0.3;
-    width: 100%;
-    top: 0;
-    height: 100%;
-    position: absolute;
-    z-index: 999;
+  .right-content {
   }
-
-  .fixed-header {
+  .title {
+    letter-spacing: 2px;
+    font-size: 25px;
+    font-weight: bolder;
+    width: 600px;
+    margin-left: 10px;
+  }
+}
+.app-wrapper {
+  @include clearfix;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  &.mobile.openSidebar {
     position: fixed;
     top: 0;
-    right: 0;
-    z-index: 9;
-    width: calc(100% - #{$sideBarWidth});
-    transition: width 0.28s;
   }
+}
+.drawer-bg {
+  background: #000;
+  opacity: 0.3;
+  width: 100%;
+  top: 0;
+  height: 100%;
+  position: absolute;
+  z-index: 999;
+}
 
-  .hideSidebar .fixed-header {
-    width: calc(100% - 54px)
-  }
+.fixed-header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 9;
+  width: calc(100% - #{$sideBarWidth});
+  transition: width 0.28s;
+}
 
-  .mobile .fixed-header {
-    width: 100%;
-  }
+.hideSidebar .fixed-header {
+  width: calc(100% - 54px);
+}
+
+.mobile .fixed-header {
+  width: 100%;
+}
 </style>
