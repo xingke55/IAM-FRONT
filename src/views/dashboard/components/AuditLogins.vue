@@ -27,8 +27,7 @@
     </div>
     <div class="content-table">
       <div class="content-inner">
-        <Table v-bind="tableConfig" :list-data="listData">
-        </Table>
+        <Table v-bind="tableConfig" :list-data="listData" />
       </div>
     </div>
   </div>

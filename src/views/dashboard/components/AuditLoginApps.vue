@@ -32,38 +32,38 @@
   </div>
 </template>
 <script>
-import Table from "@/components/Table";
-import { tableConfig } from "./tableConfig/loginAppTc.js";
+import Table from '@/components/Table'
+import { tableConfig } from './tableConfig/loginAppTc.js'
 export default {
-  name: "AuditLoginApps",
+  name: 'AuditLoginApps',
   components: {
-    Table,
+    Table
   },
   data() {
     return {
       form: {
-        userName: "",
-        displayName: "",
-        startDate: "",
-        endDate: "",
-        nmuber: "",
+        userName: '',
+        displayName: '',
+        startDate: '',
+        endDate: '',
+        nmuber: ''
       },
       showMore: false,
-      listData: [{ name: "test" }],
-      tableConfig: {},
-    };
+      listData: [{ name: 'test' }],
+      tableConfig: {}
+    }
   },
   created() {
-    this.tableConfig = tableConfig;
+    this.tableConfig = tableConfig
   },
   methods: {
     search() {},
     resetForm() {},
     add() {},
     remove() {},
-    handleRemoveClick() {},
-  },
-};
+    handleRemoveClick() {}
+  }
+}
 </script>
 <style lang='scss' scoped>
 .search-header {

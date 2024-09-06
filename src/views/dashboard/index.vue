@@ -21,11 +21,12 @@
           <el-menu-item index="AuditLogins">登录日志</el-menu-item>
           <el-menu-item index="AuditLoginApps">应用访问日志</el-menu-item>
         </el-submenu>
-        <el-menu-item index="IAM"
-          ><a href="https://localhost:9528" target="_blank"
-            >后台</a
-          ></el-menu-item
-        >
+        <el-menu-item
+          index="IAM"
+        ><a
+          href="https://localhost:9528"
+          target="_blank"
+        >后台</a></el-menu-item>
       </el-menu>
     </div>
 
@@ -36,38 +37,38 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 // 动态注册组件
-const cpnFiles = require.context("./components", true, /\.vue/);
-const components = {};
+const cpnFiles = require.context('./components', true, /\.vue/)
+const components = {}
 cpnFiles.keys().forEach((key) => {
-  const cpn = require("./components" + key.split(".")[1]);
-  const reqComName = cpn.name || key.replace(/\.\/(.*)\.vue/, "$1");
-  components[reqComName] = cpn.default || cpn;
-});
+  const cpn = require('./components' + key.split('.')[1])
+  const reqComName = cpn.name || key.replace(/\.\/(.*)\.vue/, '$1')
+  components[reqComName] = cpn.default || cpn
+})
 
 export default {
-  name: "Dashboard",
+  name: 'Dashboard',
   components,
   data() {
     return {
-      activeIndex: "Application",
-    };
+      activeIndex: 'Application'
+    }
   },
   computed: {
-    ...mapGetters(["name"]),
+    ...mapGetters(['name']),
     currentCpn() {
-      return this.activeIndex;
-    },
+      return this.activeIndex
+    }
   },
 
   methods: {
     handleSelect(key, keyPath) {
-      if (key === "IAM") return;
-      this.activeIndex = key;
-    },
-  },
-};
+      if (key === 'IAM') return
+      this.activeIndex = key
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
