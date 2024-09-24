@@ -26,7 +26,14 @@
     </div>
     <div class="content-table">
       <div class="content-inner">
-        <Table v-bind="tableConfig" :list-data="listData" />
+        <Table
+          v-model="page"
+          v-loading="loading"
+          v-bind="tableConfig"
+          :list-data="listData"
+          :list-count="listData.length"
+          @pageChange="init"
+        />
       </div>
     </div>
   </div>
@@ -34,6 +41,7 @@
 <script>
 import Table from '@/components/Table'
 import { tableConfig } from './tableConfig/loginAppTc.js'
+import { loginAppHistoryFetch } from '@/api/audit.js'
 export default {
   name: 'AuditLoginApps',
   components: {
@@ -48,17 +56,44 @@ export default {
         endDate: '',
         nmuber: ''
       },
+      page: { pageNumber: 1, pageSize: 10 },
+      loading: false,
       showMore: false,
-      listData: [{ name: 'test' }],
+      listData: [],
       tableConfig: {}
     }
   },
   created() {
     this.tableConfig = tableConfig
+    this.init()
   },
   methods: {
-    search() {},
-    resetForm() {},
+    init() {
+      this.loading = true
+      loginAppHistoryFetch({ ...this.form, ...this.page })
+        .then((res) => {
+          this.listData = res.data.rows
+          this.loading = false
+          this.page.pageNumber = res.data.page
+        })
+        .catch((e) => {
+          this.loading = false
+        })
+    },
+    search() {
+      this.init()
+    },
+    resetForm() {
+      this.form = {
+        userName: '',
+        displayName: '',
+        startDate: '',
+        endDate: '',
+        nmuber: ''
+      }
+      this.page = { pageNumber: 1, pageSize: 10 }
+      this.init()
+    },
     add() {},
     remove() {},
     handleRemoveClick() {}

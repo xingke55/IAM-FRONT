@@ -110,9 +110,11 @@ export default {
     },
     handleCurrentChange(currentPage) {
       this.$emit('update:page', { ...this.page, currentPage })
+      this.$emit('pageChange')
     },
     handleSizeChange(pageSize) {
       this.$emit('update:page', { ...this.page, pageSize })
+      this.$emit('pageChange')
     }
   }
 }

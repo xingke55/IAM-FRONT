@@ -25,7 +25,7 @@
             /></svg><span>应用</span>
         </div>
 
-        <el-select v-model="value" placeholder="请选择">
+        <el-select v-model="value" placeholder="请选择" @change="filterByValue">
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -35,9 +35,11 @@
         </el-select>
       </div>
       <ul v-if="appList.length">
-        <template v-for="(app,index) in appList">
-          <li :key="index" @click="onAuthz($event, app.id)">
-            <img :src="app.iconBase64" alt="">
+        <template v-for="(app, index) in appList">
+          <li :key="index" @click="onAuthz(app)">
+            <div style="display: flex; flex-direction: column">
+              <img :src="app.iconBase64" alt=""> <span>{{ app.appName }}</span>
+            </div>
           </li>
         </template>
       </ul>
@@ -46,31 +48,72 @@
   </div>
 </template>
 <script>
+import { getAppList } from '@/api/application.js'
 export default {
   name: 'Application',
   data() {
     return {
-      appList: [
-        {
-          id: '1',
-          iconBase64: ''
-        }
-      ],
+      appList: [],
       value: '',
       options: [
-        {
-          value: '选项1',
-          label: '黄金糕'
-        },
-        {
-          value: '选项2',
-          label: '双皮奶'
-        }
+        { value: '', label: 'All' },
+        { value: 'none', label: '暂无' },
+        { value: '1011', label: '企业服务/数据分析' },
+        { value: '1012', label: '企业服务/电子办公' },
+        { value: '1013', label: '企业服务/综合OA' },
+        { value: '1014', label: '企业服务/工商法律' },
+        { value: '1015', label: '企业服务/营销创意' },
+        { value: '1016', label: '企业服务/行政服务' },
+        { value: '1017', label: '企业服务/企业福利' },
+        { value: '1111', label: '团队协作/项目管理' },
+        { value: '1112', label: '团队协作/敏捷研发' },
+        { value: '1113', label: '团队协作/设计工具' },
+        { value: '1114', label: '团队协作/待办工具' },
+        { value: '1211', label: '人力资源/综合人事' },
+        { value: '1212', label: '人力资源/招聘管理' },
+        { value: '1213', label: '人力资源/背景调查' },
+        { value: '1214', label: '人力资源/员工激励' },
+        { value: '1215', label: '人力资源/企业文化' },
+        { value: '1311', label: '考试培训' },
+        { value: '1411', label: '商旅出行' },
+        { value: '1511', label: '财务管理/综合财务' },
+        { value: '1512', label: '财务管理/费控报销' },
+        { value: '1611', label: '表单流程' },
+        { value: '1711', label: '表单流程/业务流程' },
+        { value: '1712', label: '表单流程/问卷调研' },
+        { value: '1811', label: '供应链/资产管理' },
+        { value: '1812', label: '供应链/进销存' },
+        { value: '1911', label: '客户关系/客户服务' },
+        { value: '1912', label: '客户关系/客户管理' }
       ]
     }
   },
+  created() {
+    this.init()
+  },
   methods: {
-    onAuthz() {}
+    init() {
+      this.loading = true
+      getAppList({ ...this.form, ...this.page })
+        .then((res) => {
+          this.appList = res.data
+        })
+        .catch((e) => {})
+    },
+    onAuthz(app) {
+      if (app.protocol === 'Basic' || app.inducer === 'SP') {
+        window.open(app.loginUrl)
+        return
+      }
+      window.open(`${app.baseUrl}/authz/${app.id}`)
+    },
+    filterByValue() {
+      if (this.value !== '') {
+        this.appList = this.appList.filter((item) => item.category === this.value)
+      } else {
+        this.init()
+      }
+    }
   }
 }
 </script>
@@ -108,22 +151,37 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 254px;
-        height: 127px;
+        width: 25%;
+        height: 120px;
+
+        /* width: 254px;
+
+        height: 127px; */
         background-color: #fff;
-        margin-right: 24px;
-        margin-bottom: 12px;
-        img {
-          height: 65px;
-          width: 65px;
+        display: flex;
+        justify-content: center;
+        div {
+          width: 80%;
+          height: 80%;
+          border: 1px solid #ccc;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          img {
+            height: 65px;
+            width: 65px;
+          }
+          span{
+            display: block;
+            margin-top: 5px;
+            font-size: 10px;
+          }
+          &:hover {
+            cursor: pointer;
+            box-shadow: 0px 2px 5px 3px rgba(0, 0, 0, 0.15);
+            transition: box-shadow 0.3s, border-color 0.3s;
+          }
         }
-        &:hover {
-          cursor: pointer;
-          box-shadow: 0px 2px 5px 3px rgba(0, 0, 0, 0.15);
-        }
-      }
-      & > li:nth-child(4n) {
-        margin-right: 0;
       }
     }
     .empty {
